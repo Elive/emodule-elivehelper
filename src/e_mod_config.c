@@ -33,13 +33,13 @@ _free_data(E_Config_Dialog *cfd  __UNUSED__, E_Config_Dialog_Data *cfdata)
 static void
 _fill_data(E_Config_Dialog_Data *cfdata)
 {
-    cfdata->set = skeletor_config->set;
+    cfdata->set = elivehelpers_config->set;
 }
 
 static int
 _basic_apply_data(E_Config_Dialog *cfd __UNUSED__, E_Config_Dialog_Data *cfdata)
 {
-    skeletor_config->set = cfdata->set;
+    elivehelpers_config->set = cfdata->set;
     e_config_save_queue();
     return 1;
 }
@@ -63,23 +63,23 @@ _basic_create_widgets(E_Config_Dialog *cfd __UNUSED__, Evas *evas, E_Config_Dial
 }
 
 E_Config_Dialog *
-e_int_config_skeletor_module(E_Container *con, const char *params __UNUSED__)
+e_int_config_elivehelpers_module(E_Container *con, const char *params __UNUSED__)
 {
     E_Config_Dialog *cfd;
     E_Config_Dialog_View *v;
 
-    if(e_config_dialog_find("E", "elive/skeletor")) return NULL;
+    if(e_config_dialog_find("E", "elive/elivehelpers")) return NULL;
     v = E_NEW(E_Config_Dialog_View, 1);
     v->create_cfdata = _create_data;
     v->free_cfdata = _free_data;
     v->basic.create_widgets = _basic_create_widgets;
     v->basic.apply_cfdata = _basic_apply_data;
 
-    cfd = e_config_dialog_new(con, "Skeletor Settings",
-            "E", "elive/skeletor",
+    cfd = e_config_dialog_new(con, "Elive Helpers Settings",
+            "E", "elive/elivehelpers",
             "preferences-engine", 0, v, NULL);
     e_dialog_resizable_set(cfd->dia, 1);
-    skeletor_config->cfd = cfd;
+    elivehelpers_config->cfd = cfd;
 
     return cfd;
 }

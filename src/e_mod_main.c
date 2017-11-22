@@ -14,7 +14,7 @@ static Config_Item *_conf_item_get(const char *id);
 static const E_Gadcon_Client_Class _gadcon_class =
 {
    GADCON_CLIENT_CLASS_VERSION,
-   "Skeletor",
+   "Elive Helpers",
    {
       _gc_init, _gc_shutdown, _gc_orient, _gc_label, _gc_icon, _gc_id_new, NULL, NULL
    },
@@ -24,9 +24,9 @@ static const E_Gadcon_Client_Class _gadcon_class =
 /***************************************************************************/
 
 /***************************************************************************/
-static void _skeletor_cb_mouse_down(void *data, Evas *e, Evas_Object *obj, void *event_info);
-static void _skeletor_menu_cb_post(void *data, E_Menu *m);
-static void _skeletor_menu_cb_cfg(void *data, E_Menu *menu, E_Menu_Item *mi);
+static void _elivehelpers_cb_mouse_down(void *data, Evas *e, Evas_Object *obj, void *event_info);
+static void _elivehelpers_menu_cb_post(void *data, E_Menu *m);
+static void _elivehelpers_menu_cb_cfg(void *data, E_Menu *menu, E_Menu_Item *mi);
 /***************************************************************************/
 
 /***************************************************************************/
@@ -48,11 +48,11 @@ struct _Instance
 };
 
 
-Config *skeletor_config = NULL;
+Config *elivehelpers_config = NULL;
 static E_Config_DD *conf_edd = NULL;
 static E_Config_DD *conf_item_edd = NULL;
 static E_Action *act;
-static Eina_List *skeletor_instances = NULL;
+static Eina_List *elivehelpers_instances = NULL;
 /*
  * This function is called when you add the Module to a Shelf or Gadgets, it
  * this is where you want to add functions to do things.
@@ -68,13 +68,13 @@ _gc_init(E_Gadcon *gc, const char *name, const char *id, const char *style)
    inst = E_NEW(Instance, 1);
 
    /*get plugin path*/
-   snprintf(buf, sizeof(buf), "%s/skeletor.edj",
-           e_module_dir_get(skeletor_config->module));
+   snprintf(buf, sizeof(buf), "%s/elivehelpers.edj",
+           e_module_dir_get(elivehelpers_config->module));
 
    o = edje_object_add(gc->evas);
-   e_theme_edje_object_set(o, "base/theme/modules/skeletor",
-           "modules/skeletor/main");
-   edje_object_file_set(o,buf,"modules/skeletor/main");
+   e_theme_edje_object_set(o, "base/theme/modules/elivehelpers",
+           "modules/elivehelpers/main");
+   edje_object_file_set(o,buf,"modules/elivehelpers/main");
    edje_object_signal_emit(o, "e,state,unfocused", "e");
    evas_object_show (o);
 
@@ -85,10 +85,10 @@ _gc_init(E_Gadcon *gc, const char *name, const char *id, const char *style)
    inst->logo = o;
 
    evas_object_event_callback_add(o, EVAS_CALLBACK_MOUSE_DOWN,
-	 _skeletor_cb_mouse_down, inst);
+	 _elivehelpers_cb_mouse_down, inst);
 
-   skeletor_config->instances =
-       eina_list_append(skeletor_config->instances, inst);
+   elivehelpers_config->instances =
+       eina_list_append(elivehelpers_config->instances, inst);
 
    return gcc;
 }
@@ -138,7 +138,7 @@ _gc_orient(E_Gadcon_Client *gcc, E_Gadcon_Orient orient __UNUSED__)
 static const char *
 _gc_label(const E_Gadcon_Client_Class *client_class __UNUSED__)
 {
-   return ("Skeletor");
+   return ("Elive Helpers");
 }
 
 /*
@@ -152,8 +152,8 @@ _gc_icon(const E_Gadcon_Client_Class *client_class __UNUSED__, Evas *evas)
    char buf[PATH_MAX];
 
    o = edje_object_add(evas);
-   snprintf(buf, sizeof(buf), "%s/e-module-skeletor.edj",
-           e_module_dir_get(skeletor_config->module));
+   snprintf(buf, sizeof(buf), "%s/e-module-elivehelpers.edj",
+           e_module_dir_get(elivehelpers_config->module));
    edje_object_file_set(o, buf, "icon");
    return o;
 }
@@ -168,7 +168,7 @@ _gc_id_new(const E_Gadcon_Client_Class *client_class __UNUSED__)
     static char buf[PATH_MAX];
 
     snprintf(buf, sizeof(buf), "%s.%d", _gadcon_class.name,
-            eina_list_count(skeletor_config->instances) + 1);
+            eina_list_count(elivehelpers_config->instances) + 1);
     return buf;
 }
 
@@ -177,19 +177,19 @@ _conf_item_get(const char *id)
 {
     Config_Item *ci;
 
-    GADCON_CLIENT_CONFIG_GET(Config_Item, skeletor_config->items, _gadcon_class, id);
+    GADCON_CLIENT_CONFIG_GET(Config_Item, elivehelpers_config->items, _gadcon_class, id);
 
     ci = E_NEW(Config_Item, 1);
     ci->id = eina_stringshare_add(id);
 
-    skeletor_config->items = eina_list_append(skeletor_config->items, ci);
+    elivehelpers_config->items = eina_list_append(elivehelpers_config->items, ci);
     e_config_save_queue();
 
     return ci;
 }
 
 static void
-_skeletor_menu_cb_cfg(void *data, E_Menu *menu __UNUSED__, E_Menu_Item *mi __UNUSED__)
+_elivehelpers_menu_cb_cfg(void *data, E_Menu *menu __UNUSED__, E_Menu_Item *mi __UNUSED__)
 {
     Instance *inst = data;
     E_Container *con;
@@ -200,11 +200,11 @@ _skeletor_menu_cb_cfg(void *data, E_Menu *menu __UNUSED__, E_Menu_Item *mi __UNU
         inst->popup = NULL;
     }
     con = e_container_current_get(e_manager_current_get());
-    e_int_config_skeletor_module(con, NULL);
+    e_int_config_elivehelpers_module(con, NULL);
 }
 
 static void
-_skeletor_cb_mouse_down(void *data, Evas *e __UNUSED__, Evas_Object *obj __UNUSED__, void *event_info)
+_elivehelpers_cb_mouse_down(void *data, Evas *e __UNUSED__, Evas_Object *obj __UNUSED__, void *event_info)
 {
     Instance *inst;
     Evas_Event_Mouse_Down *ev;
@@ -218,7 +218,7 @@ _skeletor_cb_mouse_down(void *data, Evas *e __UNUSED__, Evas_Object *obj __UNUSE
         inst->menu = e_int_menus_main_new();
 
         e_menu_post_deactivate_callback_set(inst->menu,
-                _skeletor_menu_cb_post, inst);
+                _elivehelpers_menu_cb_post, inst);
 
         e_gadcon_locked_set(inst->gcc->gadcon,1);
         e_gadcon_canvas_zone_geometry_get(inst->gcc->gadcon, &x, &y, NULL, NULL);
@@ -243,9 +243,9 @@ _skeletor_cb_mouse_down(void *data, Evas *e __UNUSED__, Evas_Object *obj __UNUSE
         mi = e_menu_item_new(m);
         e_menu_item_label_set(mi, "Settings");
         e_util_menu_item_theme_icon_set(mi, "configure");
-        e_menu_item_callback_set(mi, _skeletor_menu_cb_cfg, inst);
+        e_menu_item_callback_set(mi, _elivehelpers_menu_cb_cfg, inst);
         m = e_gadcon_client_util_menu_items_append(inst->gcc, m, 0);
-        e_menu_post_deactivate_callback_set(m, _skeletor_menu_cb_post, inst);
+        e_menu_post_deactivate_callback_set(m, _elivehelpers_menu_cb_post, inst);
         inst->menu = m;
 
         e_gadcon_canvas_zone_geometry_get(inst->gcc->gadcon, &x, &y, NULL, NULL);
@@ -263,7 +263,7 @@ _skeletor_cb_mouse_down(void *data, Evas *e __UNUSED__, Evas_Object *obj __UNUSE
  * from being displayed.
  */
 static void
-_skeletor_menu_cb_post(void *data, E_Menu *m __UNUSED__)
+_elivehelpers_menu_cb_post(void *data, E_Menu *m __UNUSED__)
 {
     Instance *inst;
 
@@ -283,7 +283,7 @@ _skeletor_menu_cb_post(void *data, E_Menu *m __UNUSED__)
 EAPI E_Module_Api e_modapi =
 {
    E_MODULE_API_VERSION,
-   "Skeletor"
+   "Elive Helpers"
 };
 
 /*
@@ -299,7 +299,7 @@ e_modapi_init(E_Module *m)
 #define D conf_item_edd
     E_CONFIG_VAL(D, T, id, STR);
 
-    conf_edd = E_CONFIG_DD_NEW("Skeletor_Config", Config);
+    conf_edd = E_CONFIG_DD_NEW("Elive Helpers_Config", Config);
 #undef T
 #undef D
 #define T Config
@@ -307,11 +307,11 @@ e_modapi_init(E_Module *m)
     E_CONFIG_LIST(D, T, items, conf_item_edd);
     E_CONFIG_VAL(D, T, set, INT);
 
-    skeletor_config = e_config_domain_load("module.skeletor", conf_edd);
-    if(!skeletor_config)
-        skeletor_config = E_NEW(Config, 1);
+    elivehelpers_config = e_config_domain_load("module.elivehelpers", conf_edd);
+    if(!elivehelpers_config)
+        elivehelpers_config = E_NEW(Config, 1);
 
-    skeletor_config->module = m;
+    elivehelpers_config->module = m;
     e_gadcon_provider_register(&_gadcon_class);
     return m;
 }
@@ -327,18 +327,18 @@ e_modapi_shutdown(E_Module *m __UNUSED__)
 
     e_gadcon_provider_unregister(&_gadcon_class);
 
-    if(skeletor_config)
+    if(elivehelpers_config)
     {
-        skeletor_config->module = NULL;
-        skeletor_config->instances = NULL;
+        elivehelpers_config->module = NULL;
+        elivehelpers_config->instances = NULL;
 
-        EINA_LIST_FREE(skeletor_config->items, ci)
+        EINA_LIST_FREE(elivehelpers_config->items, ci)
         {
             eina_stringshare_del(ci->id);
             free(ci);
         }
-        E_FREE(skeletor_config);
-        skeletor_config = NULL;
+        E_FREE(elivehelpers_config);
+        elivehelpers_config = NULL;
    }
    E_CONFIG_DD_FREE(conf_edd);
    E_CONFIG_DD_FREE(conf_item_edd);

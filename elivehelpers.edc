@@ -6,7 +6,7 @@ images {
 /* define objects - groups of parts */
 collections {
    group {
-      name: "modules/skeletor/main";
+      name: "modules/elivehelpers/main";
       /* hint that the max size is 128x128 */
       max: 128 128;
       parts { /* a part */

@@ -16,8 +16,8 @@ config.sub
 configure
 configure.ac.orig
 depcomp
-e-module-skel.edj
-e_modules-skeletor.spec
+e-module-elivehelpers.edj
+e_modules-elivehelpers.spec
 install-sh
 libtool
 ltmain.sh
@@ -98,7 +98,7 @@ po/remove-potcdate.sed
 po/remove-potcdate.sin
 po/ru.gmo
 po/sk.gmo
-po/skel.pot
+po/elivehelpers.pot
 po/sl.gmo
 po/stamp-po
 po/sv.gmo
