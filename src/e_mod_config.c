@@ -33,13 +33,13 @@ _free_data(E_Config_Dialog *cfd  __UNUSED__, E_Config_Dialog_Data *cfdata)
 static void
 _fill_data(E_Config_Dialog_Data *cfdata)
 {
-    cfdata->set = elivehelpers_config->set;
+    cfdata->set = elivehelper_config->set;
 }
 
 static int
 _basic_apply_data(E_Config_Dialog *cfd __UNUSED__, E_Config_Dialog_Data *cfdata)
 {
-    elivehelpers_config->set = cfdata->set;
+    elivehelper_config->set = cfdata->set;
     e_config_save_queue();
     return 1;
 }
@@ -63,23 +63,23 @@ _basic_create_widgets(E_Config_Dialog *cfd __UNUSED__, Evas *evas, E_Config_Dial
 }
 
 E_Config_Dialog *
-e_int_config_elivehelpers_module(E_Container *con, const char *params __UNUSED__)
+e_int_config_elivehelper_module(E_Container *con, const char *params __UNUSED__)
 {
     E_Config_Dialog *cfd;
     E_Config_Dialog_View *v;
 
-    if(e_config_dialog_find("E", "elive/elivehelpers")) return NULL;
+    if(e_config_dialog_find("E", "elive/elivehelper")) return NULL;
     v = E_NEW(E_Config_Dialog_View, 1);
     v->create_cfdata = _create_data;
     v->free_cfdata = _free_data;
     v->basic.create_widgets = _basic_create_widgets;
     v->basic.apply_cfdata = _basic_apply_data;
 
-    cfd = e_config_dialog_new(con, "Elive Helpers Settings",
-            "E", "elive/elivehelpers",
+    cfd = e_config_dialog_new(con, "Elive Helper Settings",
+            "E", "elive/elivehelper",
             "preferences-engine", 0, v, NULL);
     e_dialog_resizable_set(cfd->dia, 1);
-    elivehelpers_config->cfd = cfd;
+    elivehelper_config->cfd = cfd;
 
     return cfd;
 }

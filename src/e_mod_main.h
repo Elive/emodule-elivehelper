@@ -32,14 +32,14 @@ struct _Config_Item
     const char *id;
 };
 
-E_Config_Dialog * e_int_config_elivehelpers_module(E_Container *con, const char *params);
+E_Config_Dialog * e_int_config_elivehelper_module(E_Container *con, const char *params);
 
-extern Config *elivehelpers_config;
+extern Config *elivehelper_config;
 /**
  * @addtogroup Optional_Gadgets
  * @{
  *
- * @defgroup Module_Elive Helpers Elive Helpers
+ * @defgroup Module_Elive Helper Elive Helper
  *
  * This is an updated clone of the Skel module.
  *
