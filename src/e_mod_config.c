@@ -13,6 +13,7 @@ static void  _free_data(E_Config_Dialog *cfd, E_Config_Dialog_Data *cfdata);
 /*static void _cb_first_setting_change(void *data, Evas_Object *obj);*/
 static void _fill_data(E_Config_Dialog_Data *cfdata);
 /*static int _basic_check_changed(E_Config_Dialog *cfd __UNUSED__, E_Config_Dialog_Data *cfdata);*/
+static void _cb_action_activate_ecomorph(NULL);
 
 static void *
 _create_data(E_Config_Dialog *cfd)
