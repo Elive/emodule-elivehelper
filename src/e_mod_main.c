@@ -313,6 +313,11 @@ e_modapi_init(E_Module *m)
 
     elivehelper_config->module = m;
     /*e_gadcon_provider_register(&_gadcon_class);*/
+    // TODO: these are the callbacks that i need to use for the checker of ecomorph running
+   /*edje_object_signal_callback_add(inst->o_toggle, "e,action,vkbd,enable", "part_name",*/
+                                   /*_cb_action_vkbd_enable, inst);*/
+   /*edje_object_signal_callback_add(inst->o_toggle, "e,action,vkbd,disable", "",*/
+                                   /*_cb_action_vkbd_disable, inst);*/
     return m;
 }
 
