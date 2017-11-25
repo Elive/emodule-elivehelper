@@ -339,6 +339,42 @@ _cb_action_activate_ecomorph(void *data)
                       _("Action triggered, yepeeee"));
 }
 
+static int config_module_enable_get(const char *name)
+{
+   E_Module *m;
+   if(!name) return -1;
+
+   m = e_module_find(name);
+   if((m) && (e_module_enabled_get(m)))
+      return 1;
+
+   return 0;
+}
+
+static void config_module_unload_set(const char *name)
+{
+   E_Module *m;
+   if(!name) return;
+
+   m = e_module_find(name);
+   if((m) && (e_module_enabled_get(m)))
+     {
+        e_module_disable(m);
+     }
+}
+
+static void config_module_load_set(const char *name)
+{
+   E_Module *m;
+   if(!name) return;
+
+   m = e_module_find(name);
+   if(m)
+     {
+        e_module_enable(m);
+     }
+}
+
 /*
  * This function is called by e17 when you disable the module, in e_modapi_shutdown
  * you should try to free all resources used while the module was enabled.
