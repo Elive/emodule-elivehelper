@@ -27,6 +27,8 @@
 /*static void _elivehelper_cb_mouse_down(void *data, Evas *e, Evas_Object *obj, void *event_info);*/
 /*static void _elivehelper_menu_cb_post(void *data, E_Menu *m);*/
 /*static void _elivehelper_menu_cb_cfg(void *data, E_Menu *menu, E_Menu_Item *mi);*/
+static void _cb_action_activate_ecomorph(void *data);
+/*static void _cb_action_activate_ecomorph(const char *params __UNUSED__)*/
 /***************************************************************************/
 
 /***************************************************************************/
@@ -313,18 +315,28 @@ e_modapi_init(E_Module *m)
 
     elivehelper_config->module = m;
     /*e_gadcon_provider_register(&_gadcon_class);*/
-    // TODO: these are the callbacks that i need to use for the checker of ecomorph running
-   edje_object_signal_callback_add(inst->o_toggle, "e.event.eco.*", "",
-                                   _cb_action_activate_ecomorph, NULL);
-   /*edje_object_signal_callback_add(inst->o_toggle, "e,action,vkbd,disable", "part_name",*/
-                                   /*_cb_action_vkbd_disable, inst);*/
-    return m;
+
+   act = e_action_add("Eco_Expo_Initiate_Elive");
+   if (act)
+     {
+        act->func.go = _cb_action_activate_ecomorph;
+        /*act->func.go_key = _cb_action_activate_ecomorph; \*/
+      act->func.go_key = _cb_action_activate_ecomorph;
+      act->func.go_mouse = _cb_action_activate_ecomorph;
+        e_action_predef_name_set("Ecomorph", "Expo Initiate",
+                                 "Eco_Expo_Initiate_Elive", NULL, NULL, 0);
+     }
+
+   return m;
 }
 
-EAPI void
-_cb_action_activate_ecomorph()
+static void
+/*_cb_action_activate_ecomorph(const char *params __UNUSED__)*/
+_cb_action_activate_ecomorph(void *data)
 {
-   printf("ooooooooooooo\n");
+   printf("ooooooooo\n");
+   e_util_dialog_show(_("Trigger"),
+                      _("Action triggered, yepeeee"));
 }
 
 /*
@@ -337,6 +349,13 @@ e_modapi_shutdown(E_Module *m __UNUSED__)
     Config_Item *ci;
 
     /*e_gadcon_provider_unregister(&_gadcon_class);*/
+
+    if (act)
+      {
+         e_action_predef_name_del("Ecomorph", "Eco_Expo_Initiate_Elive");
+         e_action_del("Eco_Expo_Initiate_Elive");
+         act = NULL;
+      }
 
     if(elivehelper_config)
     {
