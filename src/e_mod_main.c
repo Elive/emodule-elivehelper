@@ -27,7 +27,8 @@
 /*static void _elivehelper_cb_mouse_down(void *data, Evas *e, Evas_Object *obj, void *event_info);*/
 /*static void _elivehelper_menu_cb_post(void *data, E_Menu *m);*/
 /*static void _elivehelper_menu_cb_cfg(void *data, E_Menu *menu, E_Menu_Item *mi);*/
-static void _cb_action_activate_ecomorph(void *data);
+/*static void _cb_action_activate_ecomorph(void *data);*/
+static void _cb_action_activate_ecomorph(E_Object *obj, const char *params, int modifiers);
 /*static void _cb_action_activate_ecomorph(const char *params __UNUSED__)*/
 /***************************************************************************/
 
@@ -330,13 +331,33 @@ e_modapi_init(E_Module *m)
    return m;
 }
 
-static void
 /*_cb_action_activate_ecomorph(const char *params __UNUSED__)*/
-_cb_action_activate_ecomorph(void *data)
+/*_cb_action_activate_ecomorph(void *data)*/
+static void
+_cb_action_activate_ecomorph(E_Object *obj, const char *params, int modifiers)
 {
-   printf("ooooooooo\n");
-   e_util_dialog_show(_("Trigger"),
-                      _("Action triggered, yepeeee"));
+   /*printf("ooooooooo\n");*/
+   /*e_util_dialog_show(_("Trigger"),*/
+                      /*_("Action triggered, yepeeee"));*/
+
+   E_Module *m;
+   E_Action *a;
+
+   m = e_module_find("ecomorph");
+
+   if( !(m) || !(e_module_enabled_get(m)))
+     {
+        e_util_dialog_show(_("Ecomorph is not running"),
+                           _("Please enable the emodule Ecomorph first"));
+        return;
+     }
+
+   a = e_action_find("Eco_Expo_Initiate");
+   if ((a) && (a->func.go)) a->func.go(NULL, "1 2 0 0 0");
+   // TODO: add "object" and "params"
+
+        /*e_module_enable(m);*/
+     /*printf("no module found, install the package\n");*/
 }
 
 static int config_module_enable_get(const char *name)
