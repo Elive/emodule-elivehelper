@@ -1,15 +1,6 @@
 #include <e.h>
 #include "e_mod_main.h"
 
-#define INITS
-#define ACT_GO(name)                                      \
-  {                                                       \
-     act = e_action_add(#name);                           \
-     if (act) act->func.go = _e_actions_act_##name##_go;  \
-  }
-#define ACT_FN_GO(act, use) \
-  static void _e_actions_act_##act##_go(E_Object * obj __UNUSED__, const char *params use)
-
 
 /* gadcon requirements */
 /*static E_Gadcon_Client *_gc_init(E_Gadcon *gc, const char *name, const char *id, const char *style);*/
@@ -45,6 +36,9 @@ static void _cb_action_activate_ecomorph_opacity_decrease(E_Object *obj, const c
 /*static void _e_border_menu_cb_on_top(void *data, E_Menu *m, E_Menu_Item *mi);*/
 /*static void _e_border_menu_cb_normal(void *data, E_Menu *m, E_Menu_Item *mi);*/
 /*static void _e_border_menu_cb_below(void *data);*/
+static void _cb_action_window_stacking_above_go(E_Object *obj, const char *params, int modifiers);
+static void _cb_action_window_stacking_normal_go(E_Object *obj, const char *params, int modifiers);
+static void _cb_action_window_stacking_below_go(E_Object *obj, const char *params, int modifiers);
 /*static void _cb_action_activate_ecomorph(const char *params __UNUSED__)*/
 /***************************************************************************/
 
@@ -76,8 +70,8 @@ static E_Action *act2;
 static E_Action *act3;
 static E_Action *act4;
 static E_Action *act5;
-/*static E_Action *act6;*/
-/*static E_Action *act7;*/
+static E_Action *act6;
+static E_Action *act7;
 
 /*static Eina_List *elivehelper_instances = NULL;*/
 /*
@@ -381,20 +375,36 @@ e_modapi_init(E_Module *m)
                                  "Eco_Opacity_Decrease_Elive", NULL, NULL, 0);
      }
 
+   act5 = e_action_add("window_stacking_above");
+   if (act5)
+     {
+        act5->func.go = _cb_action_window_stacking_above_go;
+        act5->func.go_key = _cb_action_window_stacking_above_go;
+        act5->func.go_mouse = _cb_action_window_stacking_above_go;
+        e_action_predef_name_set("Elive Helpers", "Stacking Above",
+                                 "window_stacking_above", NULL, NULL, 0);
+     }
 
-   ACT_GO(window_stacking_below);
-   e_action_predef_name_set(N_("Elive Helpers"), N_("Stacking Below"),
-                            "window_stacking_below", NULL, NULL, 0);
+   act6 = e_action_add("window_stacking_normal");
+   if (act6)
+     {
+        act6->func.go = _cb_action_window_stacking_normal_go;
+        act6->func.go_key = _cb_action_window_stacking_normal_go;
+        act6->func.go_mouse = _cb_action_window_stacking_normal_go;
+        e_action_predef_name_set("Elive Helpers", "Stacking Normal",
+                                 "window_stacking_normal", NULL, NULL, 0);
+     }
 
-   /*act5 = e_action_add("Window_Stacking_Below");*/
-   /*if (act5)*/
-     /*{*/
-        /*act5->func.go = _e_border_menu_cb_below;*/
-        /*act5->func.go_key = _e_border_menu_cb_below;*/
-        /*act5->func.go_mouse = _e_border_menu_cb_below;*/
-        /*e_action_predef_name_set("Elive Helpers", "Stacking Below",*/
-                                 /*"Window_Stacking_Below", NULL, NULL, 0);*/
-     /*}*/
+
+   act7 = e_action_add("window_stacking_below");
+   if (act7)
+     {
+        act7->func.go = _cb_action_window_stacking_below_go;
+        act7->func.go_key = _cb_action_window_stacking_below_go;
+        act7->func.go_mouse = _cb_action_window_stacking_below_go;
+        e_action_predef_name_set("Elive Helpers", "Stacking Below",
+                                 "window_stacking_below", NULL, NULL, 0);
+     }
 
    return m;
 }
@@ -548,7 +558,41 @@ _cb_action_activate_ecomorph_opacity_decrease(E_Object *obj, const char *params,
      /*e_border_layer_set(bd, E_LAYER_ABOVE);*/
 /*}*/
 
-ACT_FN_GO(window_stacking_below,)
+static void _cb_action_window_stacking_above_go(E_Object *obj, const char *params, int modifiers)
+{
+   if (!obj) obj = E_OBJECT(e_border_focused_get());
+   if (!obj) return;
+   if (obj->type != E_BORDER_TYPE)
+     {
+        obj = E_OBJECT(e_border_focused_get());
+        if (!obj) return;
+     }
+
+   E_Border *bd;
+   bd = (E_Border *)obj;
+
+   if (bd->layer != E_LAYER_ABOVE)
+     e_border_layer_set(bd, E_LAYER_ABOVE);
+}
+
+static void _cb_action_window_stacking_normal_go(E_Object *obj, const char *params, int modifiers)
+{
+   if (!obj) obj = E_OBJECT(e_border_focused_get());
+   if (!obj) return;
+   if (obj->type != E_BORDER_TYPE)
+     {
+        obj = E_OBJECT(e_border_focused_get());
+        if (!obj) return;
+     }
+
+   E_Border *bd;
+   bd = (E_Border *)obj;
+
+   if (bd->layer != E_LAYER_NORMAL)
+     e_border_layer_set(bd, E_LAYER_NORMAL);
+}
+
+static void _cb_action_window_stacking_below_go(E_Object *obj, const char *params, int modifiers)
 {
    if (!obj) obj = E_OBJECT(e_border_focused_get());
    if (!obj) return;
@@ -647,6 +691,25 @@ e_modapi_shutdown(E_Module *m __UNUSED__)
          e_action_del("Eco_Opacity_Decrease_Elive");
          act4 = NULL;
       }
+    if (act5)
+      {
+         e_action_predef_name_del("Elive Helpers", "window_stacking_below");
+         e_action_del("window_stacking_below");
+         act5 = NULL;
+      }
+    if (act6)
+      {
+         e_action_predef_name_del("Elive Helpers", "window_stacking_below");
+         e_action_del("window_stacking_below");
+         act6 = NULL;
+      }
+    if (act7)
+      {
+         e_action_predef_name_del("Elive Helpers", "window_stacking_below");
+         e_action_del("window_stacking_below");
+         act7 = NULL;
+      }
+
 
 
     if(elivehelper_config)
