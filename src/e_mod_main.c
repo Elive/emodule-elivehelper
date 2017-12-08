@@ -57,7 +57,10 @@ struct _Instance
 Config *elivehelper_config = NULL;
 static E_Config_DD *conf_edd = NULL;
 static E_Config_DD *conf_item_edd = NULL;
-static E_Action *act;
+static E_Action *act1;
+static E_Action *act2;
+static E_Action *act3;
+static E_Action *act4;
 /*static Eina_List *elivehelper_instances = NULL;*/
 /*
  * This function is called when you add the Module to a Shelf or Gadgets, it
@@ -320,46 +323,42 @@ e_modapi_init(E_Module *m)
     elivehelper_config->module = m;
     /*e_gadcon_provider_register(&_gadcon_class);*/
 
-   act = NULL;
-   act = e_action_add("Eco_Expo_Initiate_Elive");
-   if (act)
+   act1 = e_action_add("Eco_Expo_Initiate_Elive");
+   if (act1)
      {
-        act->func.go = _cb_action_activate_ecomorph_expo;
-        act->func.go_key = _cb_action_activate_ecomorph_expo;
-        act->func.go_mouse = _cb_action_activate_ecomorph_expo;
+        act1->func.go = _cb_action_activate_ecomorph_expo;
+        act1->func.go_key = _cb_action_activate_ecomorph_expo;
+        act1->func.go_mouse = _cb_action_activate_ecomorph_expo;
         e_action_predef_name_set("Elive Helpers", "Desktops Organizer",
                                  "Eco_Expo_Initiate_Elive", NULL, NULL, 0);
      }
 
-   act = NULL;
-   act = e_action_add("Eco_Scale_Initiate_Elive");
-   if (act)
+   act2 = e_action_add("Eco_Scale_Initiate_Elive");
+   if (act2)
      {
-        act->func.go = _cb_action_activate_ecomorph_scale;
-        act->func.go_key = _cb_action_activate_ecomorph_scale;
-        act->func.go_mouse = _cb_action_activate_ecomorph_scale;
+        act2->func.go = _cb_action_activate_ecomorph_scale;
+        act2->func.go_key = _cb_action_activate_ecomorph_scale;
+        act2->func.go_mouse = _cb_action_activate_ecomorph_scale;
         e_action_predef_name_set("Elive Helpers", "Show all your windows",
                                  "Eco_Scale_Initiate_Elive", NULL, NULL, 0);
      }
 
-   act = NULL;
-   act = e_action_add("Eco_Opacity_Increase_Elive");
-   if (act)
+   act3 = e_action_add("Eco_Opacity_Increase_Elive");
+   if (act3)
      {
-        act->func.go = _cb_action_activate_ecomorph_opacity_increase;
-        act->func.go_key = _cb_action_activate_ecomorph_opacity_increase;
-        act->func.go_mouse = _cb_action_activate_ecomorph_opacity_increase;
+        act3->func.go = _cb_action_activate_ecomorph_opacity_increase;
+        act3->func.go_key = _cb_action_activate_ecomorph_opacity_increase;
+        act3->func.go_mouse = _cb_action_activate_ecomorph_opacity_increase;
         e_action_predef_name_set("Elive Helpers", "Transparency increase",
                                  "Eco_Opacity_Increase_Elive", NULL, NULL, 0);
      }
 
-   act = NULL;
-   act = e_action_add("Eco_Opacity_Decrease_Elive");
-   if (act)
+   act4 = e_action_add("Eco_Opacity_Decrease_Elive");
+   if (act4)
      {
-        act->func.go = _cb_action_activate_ecomorph_opacity_decrease;
-        act->func.go_key = _cb_action_activate_ecomorph_opacity_decrease;
-        act->func.go_mouse = _cb_action_activate_ecomorph_opacity_decrease;
+        act4->func.go = _cb_action_activate_ecomorph_opacity_decrease;
+        act4->func.go_key = _cb_action_activate_ecomorph_opacity_decrease;
+        act4->func.go_mouse = _cb_action_activate_ecomorph_opacity_decrease;
         e_action_predef_name_set("Elive Helpers", "Transparency decrease",
                                  "Eco_Opacity_Decrease_Elive", NULL, NULL, 0);
      }
@@ -553,12 +552,31 @@ e_modapi_shutdown(E_Module *m __UNUSED__)
 
     /*e_gadcon_provider_unregister(&_gadcon_class);*/
 
-    if (act)
+    if (act1)
       {
          e_action_predef_name_del("Elive Helpers", "Eco_Expo_Initiate_Elive");
          e_action_del("Eco_Expo_Initiate_Elive");
-         act = NULL;
+         act1 = NULL;
       }
+    if (act2)
+      {
+         e_action_predef_name_del("Elive Helpers", "Eco_Scale_Initiate_Elive");
+         e_action_del("Eco_Scale_Initiate_Elive");
+         act2 = NULL;
+      }
+    if (act3)
+      {
+         e_action_predef_name_del("Elive Helpers", "Eco_Opacity_Increase_Elive");
+         e_action_del("Eco_Opacity_Increase_Elive");
+         act3 = NULL;
+      }
+    if (act4)
+      {
+         e_action_predef_name_del("Elive Helpers", "Eco_Opacity_Decrease_Elive");
+         e_action_del("Eco_Opacity_Decrease_Elive");
+         act4 = NULL;
+      }
+
 
     if(elivehelper_config)
     {
