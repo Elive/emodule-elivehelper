@@ -39,6 +39,10 @@ static void _cb_action_activate_ecomorph_opacity_decrease(E_Object *obj, const c
 static void _cb_action_window_stacking_above_go(E_Object *obj, const char *params, int modifiers);
 static void _cb_action_window_stacking_normal_go(E_Object *obj, const char *params, int modifiers);
 static void _cb_action_window_stacking_below_go(E_Object *obj, const char *params, int modifiers);
+
+static void _cb_action_window_locks(E_Object *obj, const char *params, int modifiers);
+static void _cb_action_window_remembers(E_Object *obj, const char *params, int modifiers);
+static void _cb_action_elive_help(E_Object *obj, const char *params, int modifiers);
 /*static void _cb_action_activate_ecomorph(const char *params __UNUSED__)*/
 /***************************************************************************/
 
@@ -72,6 +76,9 @@ static E_Action *act4;
 static E_Action *act5;
 static E_Action *act6;
 static E_Action *act7;
+static E_Action *act8;
+static E_Action *act9;
+static E_Action *act10;
 
 /*static Eina_List *elivehelper_instances = NULL;*/
 /*
@@ -395,7 +402,6 @@ e_modapi_init(E_Module *m)
                                  "window_stacking_normal", NULL, NULL, 0);
      }
 
-
    act7 = e_action_add("window_stacking_below");
    if (act7)
      {
@@ -405,6 +411,27 @@ e_modapi_init(E_Module *m)
         e_action_predef_name_set("Elive Helpers", "Stacking Below",
                                  "window_stacking_below", NULL, NULL, 0);
      }
+
+   act8 = e_action_add("window_locks");
+   if (act8)
+     {
+        act8->func.go = _cb_action_window_locks;
+        act8->func.go_key = _cb_action_window_locks;
+        act8->func.go_mouse = _cb_action_window_locks;
+        e_action_predef_name_set("Elive Helpers", "Window Locks",
+                                 "window_locks", NULL, NULL, 0);
+     }
+
+   act9 = e_action_add("window_remembers");
+   if (act9)
+     {
+        act9->func.go = _cb_action_window_remembers;
+        act9->func.go_key = _cb_action_window_remembers;
+        act9->func.go_mouse = _cb_action_window_remembers;
+        e_action_predef_name_set("Elive Helpers", "Window Remembers",
+                                 "window_remembers", NULL, NULL, 0);
+     }
+
 
    return m;
 }
@@ -609,6 +636,52 @@ static void _cb_action_window_stacking_below_go(E_Object *obj, const char *param
      e_border_layer_set(bd, E_LAYER_BELOW);
 }
 
+static void _cb_action_window_locks(E_Object *obj, const char *params, int modifiers)
+{
+   if (!obj) obj = E_OBJECT(e_border_focused_get());
+   if (!obj) return;
+   if (obj->type != E_BORDER_TYPE)
+     {
+        obj = E_OBJECT(e_border_focused_get());
+        if (!obj) return;
+     }
+
+   E_Border *bd;
+
+   bd = (E_Border *)obj;
+   if (bd->border_locks_dialog)
+     {
+        e_border_desk_set(bd->border_locks_dialog->dia->win->border, bd->desk);
+        e_win_raise(bd->border_locks_dialog->dia->win);
+        e_border_focus_set(bd->border_locks_dialog->dia->win->border, 1, 1);
+        return;
+     }
+   e_int_border_locks(bd);
+}
+
+static void _cb_action_window_remembers(E_Object *obj, const char *params, int modifiers)
+{
+   if (!obj) obj = E_OBJECT(e_border_focused_get());
+   if (!obj) return;
+   if (obj->type != E_BORDER_TYPE)
+     {
+        obj = E_OBJECT(e_border_focused_get());
+        if (!obj) return;
+     }
+
+   E_Border *bd;
+
+   bd = (E_Border *)obj;
+   if (bd->border_remember_dialog)
+     {
+        e_border_desk_set(bd->border_remember_dialog->dia->win->border, bd->desk);
+        e_win_raise(bd->border_remember_dialog->dia->win);
+        e_border_focus_set(bd->border_remember_dialog->dia->win->border, 1, 1);
+        return;
+     }
+   e_int_border_remember(bd);
+}
+
 /*static void*/
 /*_e_border_menu_cb_normal(void *data, E_Menu *m __UNUSED__, E_Menu_Item *mi __UNUSED__)*/
 /*{*/
@@ -693,14 +766,14 @@ e_modapi_shutdown(E_Module *m __UNUSED__)
       }
     if (act5)
       {
-         e_action_predef_name_del("Elive Helpers", "window_stacking_below");
-         e_action_del("window_stacking_below");
+         e_action_predef_name_del("Elive Helpers", "window_stacking_above");
+         e_action_del("window_stacking_above");
          act5 = NULL;
       }
     if (act6)
       {
-         e_action_predef_name_del("Elive Helpers", "window_stacking_below");
-         e_action_del("window_stacking_below");
+         e_action_predef_name_del("Elive Helpers", "window_stacking_normal");
+         e_action_del("window_stacking_normal");
          act6 = NULL;
       }
     if (act7)
@@ -709,6 +782,27 @@ e_modapi_shutdown(E_Module *m __UNUSED__)
          e_action_del("window_stacking_below");
          act7 = NULL;
       }
+    if (act8)
+      {
+         e_action_predef_name_del("Elive Helpers", "window_locks");
+         e_action_del("window_locks");
+         act8 = NULL;
+      }
+
+    if (act9)
+      {
+         e_action_predef_name_del("Elive Helpers", "window_remembers");
+         e_action_del("window_remembers");
+         act9 = NULL;
+      }
+
+    if (act10)
+      {
+         e_action_predef_name_del("Elive Helpers", "elive_help");
+         e_action_del("elive_help");
+         act10 = NULL;
+      }
+
 
 
 
