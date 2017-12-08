@@ -698,7 +698,7 @@ static void _cb_action_elive_help(E_Object *obj, const char *params, int modifie
      ecore_exe_run("/usr/bin/elive-help", NULL);
    else
      e_util_dialog_show(_("Elive Help not installed"),
-                        _("Please install the package elive-help first"));
+                        _("Please install the package 'elive-help' first"));
 
 }
 
