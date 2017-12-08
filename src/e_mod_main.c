@@ -333,14 +333,14 @@ e_modapi_init(E_Module *m)
                                  "Eco_Expo_Initiate_Elive", NULL, NULL, 0);
      }
 
-   act2 = e_action_add("Eco_Scale_Initiate_Elive");
+   act2 = e_action_add("Eco_Scale_Initiate_All_Elive");
    if (act2)
      {
         act2->func.go = _cb_action_activate_ecomorph_scale;
         act2->func.go_key = _cb_action_activate_ecomorph_scale;
         act2->func.go_mouse = _cb_action_activate_ecomorph_scale;
         e_action_predef_name_set("Elive Helpers", "Show all your windows",
-                                 "Eco_Scale_Initiate_Elive", NULL, NULL, 0);
+                                 "Eco_Scale_Initiate_All_Elive", NULL, NULL, 0);
      }
 
    act3 = e_action_add("Eco_Opacity_Increase_Elive");
@@ -560,8 +560,8 @@ e_modapi_shutdown(E_Module *m __UNUSED__)
       }
     if (act2)
       {
-         e_action_predef_name_del("Elive Helpers", "Eco_Scale_Initiate_Elive");
-         e_action_del("Eco_Scale_Initiate_Elive");
+         e_action_predef_name_del("Elive Helpers", "Eco_Scale_Initiate_ALL_Elive");
+         e_action_del("Eco_Scale_Initiate_All_Elive");
          act2 = NULL;
       }
     if (act3)
