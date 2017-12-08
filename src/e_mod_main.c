@@ -432,6 +432,16 @@ e_modapi_init(E_Module *m)
                                  "window_remembers", NULL, NULL, 0);
      }
 
+   act10 = e_action_add("elive_help");
+   if (act10)
+     {
+        act10->func.go = _cb_action_elive_help;
+        act10->func.go_key = _cb_action_elive_help;
+        act10->func.go_mouse = _cb_action_elive_help;
+        e_action_predef_name_set("Elive Helpers", "Elive Help",
+                                 "elive_help", NULL, NULL, 0);
+     }
+
 
    return m;
 }
@@ -680,6 +690,16 @@ static void _cb_action_window_remembers(E_Object *obj, const char *params, int m
         return;
      }
    e_int_border_remember(bd);
+}
+
+static void _cb_action_elive_help(E_Object *obj, const char *params, int modifiers)
+{
+   if (ecore_file_exists("/usr/bin/elive-help"))
+     ecore_exe_run("/usr/bin/elive-help", NULL);
+   else
+     e_util_dialog_show(_("Elive Help not installed"),
+                        _("Please install the package elive-help first"));
+
 }
 
 /*static void*/
