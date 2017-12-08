@@ -28,7 +28,10 @@
 /*static void _elivehelper_menu_cb_post(void *data, E_Menu *m);*/
 /*static void _elivehelper_menu_cb_cfg(void *data, E_Menu *menu, E_Menu_Item *mi);*/
 /*static void _cb_action_activate_ecomorph(void *data);*/
-static void _cb_action_activate_ecomorph(E_Object *obj, const char *params, int modifiers);
+static void _cb_action_activate_ecomorph_expo(E_Object *obj, const char *params, int modifiers);
+static void _cb_action_activate_ecomorph_scale(E_Object *obj, const char *params, int modifiers);
+static void _cb_action_activate_ecomorph_opacity_increase(E_Object *obj, const char *params, int modifiers);
+static void _cb_action_activate_ecomorph_opacity_decrease(E_Object *obj, const char *params, int modifiers);
 /*static void _cb_action_activate_ecomorph(const char *params __UNUSED__)*/
 /***************************************************************************/
 
@@ -317,15 +320,48 @@ e_modapi_init(E_Module *m)
     elivehelper_config->module = m;
     /*e_gadcon_provider_register(&_gadcon_class);*/
 
+   act = NULL;
    act = e_action_add("Eco_Expo_Initiate_Elive");
    if (act)
      {
-        act->func.go = _cb_action_activate_ecomorph;
-        /*act->func.go_key = _cb_action_activate_ecomorph; \*/
-      act->func.go_key = _cb_action_activate_ecomorph;
-      act->func.go_mouse = _cb_action_activate_ecomorph;
-        e_action_predef_name_set("Ecomorph", "Expo Initiate",
+        act->func.go = _cb_action_activate_ecomorph_expo;
+        act->func.go_key = _cb_action_activate_ecomorph_expo;
+        act->func.go_mouse = _cb_action_activate_ecomorph_expo;
+        e_action_predef_name_set("Elive Helpers", "Desktops Organizer",
                                  "Eco_Expo_Initiate_Elive", NULL, NULL, 0);
+     }
+
+   act = NULL;
+   act = e_action_add("Eco_Scale_Initiate_Elive");
+   if (act)
+     {
+        act->func.go = _cb_action_activate_ecomorph_scale;
+        act->func.go_key = _cb_action_activate_ecomorph_scale;
+        act->func.go_mouse = _cb_action_activate_ecomorph_scale;
+        e_action_predef_name_set("Elive Helpers", "Show all your windows",
+                                 "Eco_Scale_Initiate_Elive", NULL, NULL, 0);
+     }
+
+   act = NULL;
+   act = e_action_add("Eco_Opacity_Increase_Elive");
+   if (act)
+     {
+        act->func.go = _cb_action_activate_ecomorph_opacity_increase;
+        act->func.go_key = _cb_action_activate_ecomorph_opacity_increase;
+        act->func.go_mouse = _cb_action_activate_ecomorph_opacity_increase;
+        e_action_predef_name_set("Elive Helpers", "Transparency increase",
+                                 "Eco_Opacity_Increase_Elive", NULL, NULL, 0);
+     }
+
+   act = NULL;
+   act = e_action_add("Eco_Opacity_Decrease_Elive");
+   if (act)
+     {
+        act->func.go = _cb_action_activate_ecomorph_opacity_decrease;
+        act->func.go_key = _cb_action_activate_ecomorph_opacity_decrease;
+        act->func.go_mouse = _cb_action_activate_ecomorph_opacity_decrease;
+        e_action_predef_name_set("Elive Helpers", "Transparency decrease",
+                                 "Eco_Opacity_Decrease_Elive", NULL, NULL, 0);
      }
 
    return m;
@@ -334,7 +370,7 @@ e_modapi_init(E_Module *m)
 /*_cb_action_activate_ecomorph(const char *params __UNUSED__)*/
 /*_cb_action_activate_ecomorph(void *data)*/
 static void
-_cb_action_activate_ecomorph(E_Object *obj, const char *params, int modifiers)
+_cb_action_activate_ecomorph_expo(E_Object *obj, const char *params, int modifiers)
 {
    /*printf("ooooooooo\n");*/
    /*e_util_dialog_show(_("Trigger"),*/
@@ -347,17 +383,127 @@ _cb_action_activate_ecomorph(E_Object *obj, const char *params, int modifiers)
 
    if( !(m) || !(e_module_enabled_get(m)))
      {
-        e_util_dialog_show(_("Ecomorph is not running"),
-                           _("Please enable the emodule Ecomorph first"));
+         // run ecomorph launcher or suggest to enable it
+        if (ecore_file_exists("/usr/bin/ecomorph-launcher"))
+          ecore_exe_run("/usr/bin/ecomorph-launcher", NULL);
+        else
+          e_util_dialog_show(_("Ecomorph is not running"),
+                             _("Please enable the emodule Ecomorph first"));
+
         return;
      }
 
    a = e_action_find("Eco_Expo_Initiate");
-   if ((a) && (a->func.go)) a->func.go(NULL, "1 2 0 0 0");
-   // TODO: add "object" and "params"
+   if ((a) && (a->func.go))
+     {
+        a->func.go(NULL, "1 2 0 0 0");
+     }
+   else
+     printf("E: 'Eco_Expo_Initiate' not found\n");
 
-        /*e_module_enable(m);*/
-     /*printf("no module found, install the package\n");*/
+}
+
+static void
+_cb_action_activate_ecomorph_scale(E_Object *obj, const char *params, int modifiers)
+{
+   /*printf("ooooooooo\n");*/
+   /*e_util_dialog_show(_("Trigger"),*/
+                      /*_("Action triggered, yepeeee"));*/
+
+   E_Module *m;
+   E_Action *a;
+
+   m = e_module_find("ecomorph");
+
+   if( !(m) || !(e_module_enabled_get(m)))
+     {
+         // run ecomorph launcher or suggest to enable it
+        if (ecore_file_exists("/usr/bin/ecomorph-launcher"))
+          ecore_exe_run("/usr/bin/ecomorph-launcher", NULL);
+        else
+          e_util_dialog_show(_("Ecomorph is not running"),
+                             _("Please enable the emodule Ecomorph first"));
+
+        return;
+     }
+
+   a = e_action_find("Eco_Scale_Initiate_All");
+   if ((a) && (a->func.go))
+     {
+        a->func.go(NULL, "1 0 0 1 0");
+     }
+   else
+     printf("E: 'Eco_Scale_Initiate_All' not found\n");
+
+}
+
+static void
+_cb_action_activate_ecomorph_opacity_increase(E_Object *obj, const char *params, int modifiers)
+{
+   /*printf("ooooooooo\n");*/
+   /*e_util_dialog_show(_("Trigger"),*/
+                      /*_("Action triggered, yepeeee"));*/
+
+   E_Module *m;
+   E_Action *a;
+
+   m = e_module_find("ecomorph");
+
+   if( !(m) || !(e_module_enabled_get(m)))
+     {
+         // run ecomorph launcher or suggest to enable it
+        if (ecore_file_exists("/usr/bin/ecomorph-launcher"))
+          ecore_exe_run("/usr/bin/ecomorph-launcher", NULL);
+        else
+          e_util_dialog_show(_("Ecomorph is not running"),
+                             _("Please enable the emodule Ecomorph first"));
+
+        return;
+     }
+
+   a = e_action_find("Eco_Opacity_Increase");
+   if ((a) && (a->func.go))
+     {
+        a->func.go(NULL, "2 8 0 0 1");
+     }
+   else
+     printf("E: 'Eco_Opacity_Increase' not found\n");
+
+}
+
+
+static void
+_cb_action_activate_ecomorph_opacity_decrease(E_Object *obj, const char *params, int modifiers)
+{
+   /*printf("ooooooooo\n");*/
+   /*e_util_dialog_show(_("Trigger"),*/
+                      /*_("Action triggered, yepeeee"));*/
+
+   E_Module *m;
+   E_Action *a;
+
+   m = e_module_find("ecomorph");
+
+   if( !(m) || !(e_module_enabled_get(m)))
+     {
+         // run ecomorph launcher or suggest to enable it
+        if (ecore_file_exists("/usr/bin/ecomorph-launcher"))
+          ecore_exe_run("/usr/bin/ecomorph-launcher", NULL);
+        else
+          e_util_dialog_show(_("Ecomorph is not running"),
+                             _("Please enable the emodule Ecomorph first"));
+
+        return;
+     }
+
+   a = e_action_find("Eco_Opacity_Decrease");
+   if ((a) && (a->func.go))
+     {
+        a->func.go(NULL, "2 8 0 0 2");
+     }
+   else
+     printf("E: 'Eco_Opacity_Decrease' not found\n");
+
 }
 
 static int config_module_enable_get(const char *name)
@@ -409,7 +555,7 @@ e_modapi_shutdown(E_Module *m __UNUSED__)
 
     if (act)
       {
-         e_action_predef_name_del("Ecomorph", "Eco_Expo_Initiate_Elive");
+         e_action_predef_name_del("Elive Helpers", "Eco_Expo_Initiate_Elive");
          e_action_del("Eco_Expo_Initiate_Elive");
          act = NULL;
       }
