@@ -467,7 +467,7 @@ _cb_action_activate_ecomorph_expo(E_Object *obj, const char *params, int modifie
           ecore_exe_run("/usr/bin/ecomorph-launcher", NULL);
         else
           e_util_dialog_show(_("Ecomorph is not running"),
-                             _("Please enable the emodule Ecomorph first"));
+                             _("Please enable the emodule Ecomorph first or install the package 'emodule-ecomorph' if you don't have it."));
 
         return;
      }
@@ -501,7 +501,7 @@ _cb_action_activate_ecomorph_scale(E_Object *obj, const char *params, int modifi
           ecore_exe_run("/usr/bin/ecomorph-launcher", NULL);
         else
           e_util_dialog_show(_("Ecomorph is not running"),
-                             _("Please enable the emodule Ecomorph first"));
+                             _("Please enable the emodule Ecomorph first or install the package 'emodule-ecomorph' if you don't have it."));
 
         return;
      }
@@ -535,7 +535,7 @@ _cb_action_activate_ecomorph_opacity_increase(E_Object *obj, const char *params,
           ecore_exe_run("/usr/bin/ecomorph-launcher", NULL);
         else
           e_util_dialog_show(_("Ecomorph is not running"),
-                             _("Please enable the emodule Ecomorph first"));
+                             _("Please enable the emodule Ecomorph first or install the package 'emodule-ecomorph' if you don't have it."));
 
         return;
      }
@@ -570,7 +570,7 @@ _cb_action_activate_ecomorph_opacity_decrease(E_Object *obj, const char *params,
           ecore_exe_run("/usr/bin/ecomorph-launcher", NULL);
         else
           e_util_dialog_show(_("Ecomorph is not running"),
-                             _("Please enable the emodule Ecomorph first"));
+                             _("Please enable the emodule Ecomorph first or install the package 'emodule-ecomorph' if you don't have it."));
 
         return;
      }
