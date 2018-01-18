@@ -695,7 +695,7 @@ static void _cb_action_window_remembers(E_Object *obj, const char *params, int m
 static void _cb_action_elive_help(E_Object *obj, const char *params, int modifiers)
 {
    if (ecore_file_exists("/usr/bin/elive-help"))
-     ecore_exe_run("/usr/bin/elive-help", NULL);
+     ecore_exe_run("/usr/bin/elive-help --fs", NULL);
    else
      e_util_dialog_show(_("Elive Help not found"),
                         _("The elive user guide and hotkeys tutorial is not writed at this moment, please help us with a donation to make this project to progress faster!"));
