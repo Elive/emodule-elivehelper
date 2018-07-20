@@ -2,5 +2,5 @@
 Type=Link
 Name=Elive Helper
 Icon=e-module-elivehelper
-Comment=<hilight>This is a Elive Helper module</hilight><br><br>for e17.
+Comment=<hilight>This is a Helper for Elive that makes things work better, do not disable it.</hilight>
 X-Enlightenment-ModuleType=utils
